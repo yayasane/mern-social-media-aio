@@ -1,0 +1,10 @@
+* {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+input,
+button,
+textarea:focus {
+  outline: none;
+}

@@ -84,6 +84,16 @@ app.use('/api/posts', postRoutes)
 app.use('/api/conversations', conversationRoutes)
 app.use('/api/messages', messageRoutes)
 
-app.listen(8800, () => {
+/************** Heroku Deployement START *****************/
+// Related with Heroku deployement
+
+app.use(express.static(path.join(__dirname, '/social-media-react/build')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/social-media-react/build', 'index.html'))
+})
+/************** Heroku Deployement END *****************/
+
+app.listen(process.env.PORT || 5000, () => {
   console.log('Backend server in running')
 })
