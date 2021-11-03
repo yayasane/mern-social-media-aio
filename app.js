@@ -34,7 +34,7 @@ const corsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
 }
-// app.use(cors(corsOptions))
+app.use(cors(corsOptions))
 
 mongoose.connect(
   process.env.MONGO_URL,
@@ -84,21 +84,17 @@ app.use('/api/posts', postRoutes)
 app.use('/api/conversations', conversationRoutes)
 app.use('/api/messages', messageRoutes)
 
-/***********const app = require('./app')*** Heroku Deployement START *****************/
+/************** Heroku Deployement START *****************/
 // Related with Heroku deployement
-app.use(express.static(path.join(__dirname, 'client', 'build')))
 
-// ...
-// Right before your app.listen(), add this:
+app.use(express.static(path.join(__dirname, '/social-media-react/build')))
+
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+  res.setHeader(
+    'Content-Security-Policy',
+    ": default-src *; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' scinsocial.herokuapp.com",
+  )
+  res.sendFile(path.join(__dirname, '/social-media-react/build', 'index.html'))
 })
 /************** Heroku Deployement END *****************/
-// const server = require('http').Server(app)
-// const io = (module.exports.io = require('socket.io')(server))
-// const SocketManager = require('./SocketManager')
-// io.on('connection', SocketManager)
-app.listen(process.env.PORT || 5000, (res, err) => {
-  console.log(res)
-  console.log('Backend server in running')
-})
+module.export = app
